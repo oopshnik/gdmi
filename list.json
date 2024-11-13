@@ -8,13 +8,11 @@
     "darinox": {
         "name": "Darinox GDPS",
         "url": "https://github.com/oopshnik/gdmi/releases/download/gd/test.zip",
-        "lastest": "true",
         "gdps": "on"
     },
     "test2": {
-        "name": "Version 1.2.3",
+        "name": "Version 142.3",
         "url": "https://github.com/oopshnik/gdmi/releases/download/gd/test.zip",
-        "lastest": "true",
+        "lastest": "false",
         "gdps": "off"
-    }
 }
