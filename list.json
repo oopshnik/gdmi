@@ -1,7 +1,7 @@
 {
-    "test": {
-        "name": "Version 1.2.3",
-        "url": "https://github.com/oopshnik/gdmi/releases/download/gd/test.zip",
+    "2.207": {
+        "name": "Version 2.207",
+        "url": "https://darinoxgdps.ru/gdcrack/releases/2.207.zip",
         "lastest": "true",
         "gdps": "off"
     },
@@ -10,10 +10,23 @@
         "url": "https://github.com/oopshnik/gdmi/releases/download/gd/test.zip",
         "gdps": "on"
     },
-    "test2": {
-        "name": "Version 142.3",
-        "url": "https://github.com/oopshnik/gdmi/releases/download/gd/test.zip",
+    "2.206": {
+        "name": "Version 2.206",
+        "url": "https://darinoxgdps.ru/gdcrack/releases/2.204.zip",
         "lastest": "false",
         "gdps": "off"
-    }
+    },
+    "2.1": {
+        "name": "Version 2.1",
+        "url": "https://darinoxgdps.ru/gdcrack/releases/2.1.zip",
+        "lastest": "false",
+        "gdps": "off"
+    },
+    "2.204": {
+        "name": "Version 2.204",
+        "url": "https://darinoxgdps.ru/gdcrack/releases/2.204.zip",
+        "lastest": "false",
+        "gdps": "off"
+        }
+
 }
