@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometry Dash Modding Installer</title>
+    <style>
+    :root {
+        --primary-color: #6366f1;
+        --primary-hover: #4f46e5;
+        --background-color: #f8fafc;
+        --card-background: #ffffff;
+        --text-color: #1e293b;
+        --border-color: #e2e8f0;
+        --shadow-color: rgba(0, 0, 0, 0.1);
+    }
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: system-ui, -apple-system, sans-serif;
+    }
+    
+    body {
+        background-color: var(--background-color);
+        color: var(--text-color);
+        line-height: 1.5;
+    }
+    
+    .container {
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 1.5rem;
+        background: var(--card-background);
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px var(--shadow-color);
+    }
+    
+    .tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 0.5rem;
+    }
+    
+    .tab-button {
+        background: none;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        cursor: pointer;
+        color: var(--text-color);
+        border-radius: 0.5rem;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+    
+    .tab-button:hover {
+        background-color: var(--background-color);
+    }
+    
+    .tab-button.active {
+        color: var(--primary-color);
+        background-color: #eef2ff;
+    }
+    
+    .title {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .gradient-text {
+        font-size: 2.5rem;
+        font-weight: bold;
+        background: linear-gradient(45deg, var(--primary-color), #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .title h3 {
+        color: var(--text-color);
+        font-weight: 500;
+        margin-top: 0.5rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--text-color);
+    }
+    
+    .select-wrapper {
+        position: relative;
+    }
+    
+    select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        background-color: white;
+        appearance: none;
+        font-size: 1rem;
+        color: var(--text-color);
+    }
+    
+    .select-arrow {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-color);
+        pointer-events: none;
+    }
+    
+    .directory-input {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    #path-display {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        background-color: white;
+        color: var(--text-color);
+        cursor: default;
+    }
+    
+    .browse-btn {
+        padding: 0.75rem 1rem;
+        background-color: var(--background-color);
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        cursor: pointer;
+        color: var(--text-color);
+        transition: all 0.2s;
+    }
+    
+    .browse-btn:hover {
+        background-color: var(--border-color);
+    }
+    
+    .options-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .option-card {
+        position: relative;
+        text-align: center;
+    }
+    
+    .option-card input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+    
+    .option-card label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .option-card label:hover {
+        background-color: var(--background-color);
+    }
+    
+    .option-card input[type="checkbox"]:checked + label {
+        background-color: #eef2ff;
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+    
+    .button-container {
+        text-align: center;
+    }
+    
+    .button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 2rem;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .button:hover {
+        background-color: var(--primary-hover);
+    }
+    
+    .flash {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 0.5rem;
+    }
+    
+    .flash.success {
+        background-color: #dcfce7;
+        color: #166534;
+    }
+    
+    .flash.error {
+        background-color: #fee2e2;
+        color: #991b1b;
+    }
+    
+    .credits-content {
+        text-align: center;
+        line-height: 1.8;
+    }
+    
+    .credits-content p {
+        margin-bottom: 1rem;
+    }
+            :root[data-theme="light"] {
+                --primary-color: #6366f1;
+                --primary-hover: #4f46e5;
+                --background-color: #f8fafc;
+                --card-background: #ffffff;
+                --text-color: #1e293b;
+                --border-color: #e2e8f0;
+                --shadow-color: rgba(0, 0, 0, 0.1);
+            }
+    
+            :root[data-theme="dark"] {
+                --primary-color: #818cf8;
+                --primary-hover: #6366f1;
+                --background-color: #1e293b;
+                --card-background: #2d3748;
+                --text-color: #f8fafc;
+                --border-color: #4a5568;
+                --shadow-color: rgba(0, 0, 0, 0.3);
+            }
+    
+            /* Previous CSS remains the same, just add these new elements: */
+    
+            .theme-switch {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                cursor: pointer;
+                padding: 0.5rem;
+                border-radius: 0.5rem;
+                background: var(--card-background);
+                border: 1px solid var(--border-color);
+            }
+    
+            .progress-container {
+                margin-top: 1rem;
+                display: none;
+            }
+    
+            .progress-bar {
+                width: 100%;
+                height: 0.5rem;
+                background-color: var(--border-color);
+                border-radius: 0.25rem;
+                overflow: hidden;
+            }
+    
+            .progress {
+                width: 0%;
+                height: 100%;
+                background-color: var(--primary-color);
+                transition: width 0.3s ease;
+            }
+    
+            .progress-text {
+                text-align: center;
+                margin-top: 0.5rem;
+                font-size: 0.875rem;
+                color: var(--text-color);
+            }
+    
+            .app-icon {
+                width: 64px;
+                height: 64px;
+                margin: 0 auto 1rem;
+                border-radius: 12px;
+                display: block;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="theme-switch" onclick="toggleTheme()">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('main')">Main</button>
+            <button class="tab-button" onclick="showTab('credits')">Credits</button>
+        </div>
+
+        <div id="main-content">
+            <div class="title">
+                <div class="gradient-text">GDMI</div>
+                <h3>Geometry Dash Modding Installer</h3>
+            </div>
+
+            <form id="install-form">
+                <div class="form-group">
+                    <label class="form-label">Select Version</label>
+                    <div class="select-wrapper">
+                        <select id="version-select" required>
+                            <option value="">Choose a version...</option>
+                            {% for version, info in categorized_versions.latest.items() %}
+                            <option value="{{ version }}">{{ version }} - {{ info['name'] }}</option>
+                            {% endfor %}
+                            {% for version, info in categorized_versions.gdps.items() %}
+                            <option value="{{ version }}">{{ version }} - {{ info['name'] }}</option>
+                            {% endfor %}
+                            {% for version, info in categorized_versions.other.items() %}
+                            <option value="{{ version }}">{{ version }} - {{ info['name'] }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="select-arrow">▼</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Installation Directory</label>
+                    <div class="directory-input">
+                        <div id="path-display">Choose installation folder...</div>
+                        <button type="button" class="browse-btn" onclick="selectDirectory()">Browse</button>
+                    </div>
+                </div>
+
+                <div class="options-grid">
+                    <div class="option-card">
+                        <input type="checkbox" id="geode" name="options" value="geode">
+                        <label for="geode">
+                            <span>Geode</span>
+                        </label>
+                    </div>
+                    <div class="option-card">
+                        <input type="checkbox" id="megahack" name="options" value="megahack">
+                        <label for="megahack">
+                            <span>MegaHack</span>
+                        </label>
+                    </div>
+                    <div class="option-card">
+                        <input type="checkbox" id="redists" name="options" value="redists">
+                        <label for="redists">
+                            <span>Redists</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="progress-container" id="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress" id="progress"></div>
+                    </div>
+                    <div class="progress-text" id="progress-text">Installing...</div>
+                </div>
+
+                <div class="button-container">
+                    <button type="submit" class="button">
+                        <span>Install/Launch</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="credits-content" style="display: none;">
+            <div class="credits-content">
+                <h2>Credits</h2>
+                <p><strong>Developer</strong><br>GDMI was created by oopshnik</p>
+                <p><strong>Special Thanks</strong><br>
+                RobTop Games - Geometry Dash<br>
+                Mat - MegaHack<br>
+                Geode Team - Geode SDK<br>
+                All GDPS Creators</p>
+                <p><strong>Support</strong><br>
+                If you enjoy GDMI, consider following me on:<br>
+                <a href="https://github.com/oopshnik">GitHub</a><br>
+                <a href="https://discord.gg/gdmi">Discord</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            const mainContent = document.getElementById('main-content');
+            const creditsContent = document.getElementById('credits-content');
+            const tabs = document.querySelectorAll('.tab-button');
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            if (tabName === 'main') {
+                mainContent.style.display = 'block';
+                creditsContent.style.display = 'none';
+                tabs[0].classList.add('active');
+            } else {
+                mainContent.style.display = 'none';
+                creditsContent.style.display = 'block';
+                tabs[1].classList.add('active');
+            }
+        }
+
+        async function selectDirectory() {
+            const response = await fetch('/select_directory');
+            const data = await response.json();
+            if (data.path) {
+                document.getElementById('path-display').textContent = data.path;
+            }
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+        }
+
+        document.getElementById('install-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const version = document.getElementById('version-select').value;
+            const directory = document.getElementById('path-display').textContent;
+            const options = Array.from(document.querySelectorAll('input[name="options"]:checked'))
+                .map(option => option.value);
+
+            if (!version || directory === 'Choose installation folder...') {
+                alert('Please select both version and installation directory');
+                return;
+            }
+
+            const progressContainer = document.getElementById('progress-container');
+            const progress = document.getElementById('progress');
+            const progressText = document.getElementById('progress-text');
+
+            progressContainer.style.display = 'block';
+            
+            // Simulate installation progress
+            let currentProgress = 0;
+            const interval = setInterval(() => {
+                currentProgress += 5;
+                progress.style.width = `${currentProgress}%`;
+                progressText.textContent = `Installing... ${currentProgress}%`;
+                
+                if (currentProgress >= 100) {
+                    clearInterval(interval);
+                    progressText.textContent = 'Installation Complete!';
+                }
+            }, 100);
+
+            try {
+                const response = await fetch('/install', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        version,
+                        directory,
+                        options
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    setTimeout(() => {
+                        progressContainer.style.display = 'none';
+                        alert(result.message);
+                    }, 2500);
+                }
+            } catch (error) {
+                console.error('Installation failed:', error);
+                progressContainer.style.display = 'none';
+                alert('Installation failed. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
