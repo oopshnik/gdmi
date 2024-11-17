@@ -2,37 +2,44 @@
     "latest": {
         "2.207": {
             "name": "Version 2.207",
-            "url": "https://darinoxgdps.ru/gdcrack/releases/2.207.zip"
+            "url": "https://darinoxgdps.ru/gdcrack/releases/2.207.zip",
+            "id": "2.207"
         }
     },
     "gdps": {
         "darinox": {
             "name": "Darinox GDPS",
-            "url": "https://github.com/oopshnik/gdmi/releases/download/gd/test.zip"
+            "url": "https://github.com/oopshnik/gdmi/releases/download/gd/test.zip",
+            "id": "darinox"
         }
     },
     "other": {
         "2.206": {
             "name": "Version 2.206",
-            "url": "https://darinoxgdps.ru/gdcrack/releases/2.206.zip"
+            "url": "https://darinoxgdps.ru/gdcrack/releases/2.206.zip",
+            "id": "2.206"
         },
         "2.1": {
             "name": "Version 2.1",
-            "url": "https://darinoxgdps.ru/gdcrack/releases/2.1.zip"
+            "url": "https://darinoxgdps.ru/gdcrack/releases/2.1.zip",
+            "id": "2.1"
         },
         "2.204": {
             "name": "Version 2.204",
-            "url": "https://darinoxgdps.ru/gdcrack/releases/2.204.zip"
+            "url": "https://darinoxgdps.ru/gdcrack/releases/2.204.zip",
+            "id": "2.204"
         }
     },
     "stuffs": {
         "geode": {
             "name": "Geode",
-            "url": ".."
+            "url": "..",
+            "id": "geode"
         },
         "megahack": {
             "name": "MegaHack",
-            "url": ".."
+            "url": "..",
+            "id": "megahack"
         }
     }
 }
