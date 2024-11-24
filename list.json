@@ -38,12 +38,12 @@
     "stuffs": {
         "geode": {
             "name": "Geode",
-            "url": "..",
+            "url": "https://github.com/oopshnik/gdmi/releases/download/gd/test.zip",
             "id": "geode"
         },
         "megahack": {
             "name": "MegaHack",
-            "url": "..",
+            "url": "https://github.com/oopshnik/gdmi/releases/download/gd/test.zip",
             "id": "megahack"
         }
     }

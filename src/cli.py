@@ -1,8 +1,7 @@
 import os
 import json
-import win32com.client
-from utils import fetch_data, save_file, load_config, save_config, organize_path, ensure_directory_exists, toggle_extension
-import shutil
+from utils import fetch_data, load_config, save_config, organize_path, ensure_directory_exists, toggle_extension, create_shortcut, download_and_extract_version, find_geometry_dash_exe
+
 CONFIG_PATH = 'config.json'
 DATA_URL = 'https://raw.githubusercontent.com/oopshnik/gdmi/refs/heads/main/list.json'
 
@@ -39,16 +38,10 @@ def get_version_choice(versions):
             return versions[choice]
         print("Invalid version ID, please try again.")
 
-def create_shortcut(target_path, shortcut_path, description=""):
-    shell = win32com.client.Dispatch("WScript.Shell")
-    shortcut = shell.CreateShortCut(shortcut_path)
-    shortcut.Targetpath = target_path
-    shortcut.Description = description
-    shortcut.save()
-
 def main():
     data = fetch_data(DATA_URL)
-    if not data:
+    if isinstance(data, str):
+        print(data)
         return
 
     config = load_config(CONFIG_PATH)
@@ -79,28 +72,38 @@ def main():
         ensure_directory_exists(save_path)
         file_path = os.path.join(save_path, f"{version['name']}.zip")
 
-        if save_file(version['url'], file_path):
-            print(f"Downloaded {version['name']} to {file_path}")
+        if category == 'stuffs':
+            # Ask if the user wants to include addons
+            include_addons = input(f"Do you want to include addons for {version['name']}? (y/n): ").strip().lower() == 'y'
+            if include_addons:
+                for ext_id, ext_config in config.items():
+                    if ext_config:
+                        ext_version = data['stuffs'].get(ext_id)
+                        if ext_version:
+                            ext_save_path = organize_path(base_dir, 'stuffs', ext_version['name'])
+                            ensure_directory_exists(ext_save_path)
+                            ext_file_path = os.path.join(ext_save_path, f"{ext_version['name']}.zip")
+                            download_result = download_and_extract_version(ext_version, ext_file_path)
+                            print(f"Addon {ext_version['name']}: {download_result}")
 
-            # Extract the zip file
-            extract_path = os.path.join(save_path, version['name'])
-            ensure_directory_exists(extract_path)
-            shutil.unpack_archive(file_path, extract_path)
+        download_result = download_and_extract_version(version, file_path)
+        print(f"Version {version['name']}: {download_result}")
+        if "successful" not in download_result:
+            continue
 
-            # Find GeometryDash.exe in the extracted folder
-            geometry_dash_exe_path = os.path.join(extract_path, "GeometryDash.exe")
-            if not os.path.exists(geometry_dash_exe_path):
-                print("GeometryDash.exe not found in the extracted files.")
-            else:
-                # Ask if the user wants to create a shortcut
-                create_shortcut_choice = input("Do you want to create a shortcut to GeometryDash.exe? (y/n): ").strip().lower()
-                if create_shortcut_choice == 'y':
-                    desktop = os.path.join(os.path.expanduser("~"), "Desktop")
-                    shortcut_path = os.path.join(desktop, "GeometryDash.lnk")
-                    create_shortcut(geometry_dash_exe_path, shortcut_path, "Shortcut to GeometryDash")
-                    print(f"Shortcut created at {shortcut_path}")
-        else:
-            print(f"Failed to download {version['name']}")
+        # Find GeometryDash.exe in the extracted folder
+        geometry_dash_exe_path = find_geometry_dash_exe(save_path)
+        if not geometry_dash_exe_path:
+            print("GeometryDash.exe not found in the extracted files.")
+            continue
+
+        # Ask if the user wants to create a shortcut
+        create_shortcut_choice = input("Do you want to create a shortcut to GeometryDash.exe? (y/n): ").strip().lower()
+        if create_shortcut_choice == 'y':
+            desktop = os.path.join(os.path.expanduser("~"), "Desktop")
+            shortcut_path = os.path.join(desktop, "GeometryDash.lnk")
+            shortcut_result = create_shortcut(geometry_dash_exe_path, shortcut_path, "Shortcut to GeometryDash")
+            print(shortcut_result)
 
         cont = input("Do you want to download another version? (y/n): ").strip().lower()
         if cont != 'y':
