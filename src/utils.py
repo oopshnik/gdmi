@@ -1,74 +1,59 @@
-import requests
-import zipfile
 import os
+import json
 import requests
-from rich.console import Console
-from rich.table import Table
+from tqdm import tqdm
+import shutil
 
+def fetch_data(url):
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        print(f"Error fetching data: {e}")
+        return None
 
-def fetch_versions():
-    response = requests.get("https://raw.githubusercontent.com/oopshnik/gdmi/refs/heads/main/list.json")
-    data = response.json()
-    return data
-
-
-def display_versions(data):
-    console = Console()
-    table = Table(title="Versions Overview")
-    table.add_column("Category", justify="center", style="bold cyan")
-    table.add_column("Version/Name", justify="center", style="bold magenta")
-    table.add_column("ID", justify="center", style="dim")
-    table.add_column("URL", justify="left", style="dim")
-
-    latest_version = list(data['latest'].keys())[0]
-    latest_name = data['latest'][latest_version]['name']
-    latest_id = data['latest'][latest_version]['id']
-    latest_url = data['latest'][latest_version]['url']
-    table.add_row("Latest Version", latest_name, latest_id, latest_url)
-
-    gdps_name = list(data['gdps'].keys())[0]
-    gdps_id = data['gdps'][gdps_name]['id']
-    gdps_url = data['gdps'][gdps_name]['url']
-    table.add_row("GDPS", gdps_name, gdps_id, gdps_url)
-
-    for version, version_info in data['other'].items():
-        table.add_row("Other", version_info['name'], version_info['id'], version_info['url'])
-    return table
-
-
-def download(url, output):
-    if isinstance(url, str) and url.startswith("{") and url.endswith("}"):
-        url = url.strip("{}").strip("'\"")
-    
-    os.makedirs(os.path.dirname(output), exist_ok=True)
-
+def save_file(url, save_path):
     try:
         response = requests.get(url, stream=True)
-        response.raise_for_status() 
-        
-        with open(output, 'wb') as f:
-            for chunk in response.iter_content(chunk_size=1024):
-                if chunk: 
-                    f.write(chunk)
-        return f"Downloaded {url} to {output}"
-    except requests.exceptions.RequestException as e:
-        return f"Failed to download {url}. Error: {e}"
-def extract(zip_file, output):
-    with zipfile.ZipFile(zip_file, 'r') as zip_ref:
-        zip_ref.extractall(output)
-    return f"Extracted {zip_file} to {output}"
+        response.raise_for_status()
+        total_size = int(response.headers.get('content-length', 0))
+        block_size = 1024  # 1 Kibibyte
+        with open(save_path, 'wb') as file, tqdm(
+            desc=save_path,
+            total=total_size,
+            unit='iB',
+            unit_scale=True,
+            unit_divisor=1024,
+        ) as bar:
+            for data in response.iter_content(block_size):
+                bar.update(len(data))
+                file.write(data)
+    except requests.RequestException as e:
+        print(f"Error downloading file: {e}")
+        return False
+    return True
 
+def load_config(config_path):
+    if os.path.exists(config_path):
+        with open(config_path, 'r') as file:
+            return json.load(file)
+    return {}
 
-def json(type, version):
-    response = requests.get("https://raw.githubusercontent.com/oopshnik/gdmi/refs/heads/main/list.json")
-    if response.status_code == 200:
-        json_data = response.json()
-        if type in json_data:
-            if version in json_data[type]:
-                return json_data[type][version]
-            else:
-                return f"Version {version} not found in {type} section of JSON"
-        else:
-            return f"Section {type} not found in JSON"
+def save_config(config_path, config):
+    with open(config_path, 'w') as file:
+        json.dump(config, file, indent=4)
+
+def organize_path(base_dir, category, version_name):
+    return os.path.join(base_dir, category, version_name)
+
+def ensure_directory_exists(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+def toggle_extension(config, extension_id):
+    if extension_id in config:
+        config[extension_id] = not config[extension_id]
     else:
-        return f"Failed to fetch JSON. Status code: {response.status_code}"
+        config[extension_id] = True
+    return config

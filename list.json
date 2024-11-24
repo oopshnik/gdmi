@@ -16,7 +16,7 @@
     "other": {
         "2.206": {
             "name": "Version 2.206",
-            "url": "https://darinoxgdps.ru/gdcrack/releases/2.206.zip",
+            "url": "https://darinoxgdps.ru/assets/gdps/DarinoxGDPS.zip",
             "id": "2.206"
         },
         "2.1": {
@@ -28,6 +28,11 @@
             "name": "Version 2.204",
             "url": "https://darinoxgdps.ru/gdcrack/releases/2.204.zip",
             "id": "2.204"
+        },
+        "test":{
+            "name": "test ver",
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/FullMoon2010.jpg/1200px-FullMoon2010.jpg",
+            "id": "test"
         }
     },
     "stuffs": {
@@ -42,4 +47,5 @@
             "id": "megahack"
         }
     }
+
 }
